@@ -17,17 +17,29 @@ class ResponseLogger
     /**
      *
      */
-    const LOG_CONTEXT = "RESPONSE";
+    const LOG_CONTEXT = 'RESPONSE';
 
     /**
      * @var array
      */
     protected $formats = [
-        "combined"  =>'{remote-addr} - {remote-user} [{date}] "{method} {url} HTTP/{http-version}" {status} {content-length} "{referer}" "{user-agent}"',
-        "common"    =>'{remote-addr} - {remote-user} [{date}] "{method} {url} HTTP/{http-version}" {status} {content-length}',
-        "dev"       =>'{method} {url} {status} {response-time} ms - {content-length}',
-        "short"     =>'{remote-addr} {remote-user} {method} {url} HTTP/{http-version} {status} {content-length} - {response-time} ms',
-        "tiny"      =>'{method} {url} {status} {content-length} - {response-time} ms'
+        'combined'  => '{remote-addr} - {remote-user} [{date}] "{method} {url} HTTP/{http-version}" {status} {content-length} "{referer}" "{user-agent}"',
+        'common'    => '{remote-addr} - {remote-user} [{date}] "{method} {url} HTTP/{http-version}" {status} {content-length}',
+        'dev'       => '{method} {url} {status} {response-time} ms - {content-length}',
+        'short'     => '{remote-addr} {remote-user} {method} {url} HTTP/{http-version} {status} {content-length} - {response-time} ms',
+        'tiny'      => '{method} {url} {status} {content-length} - {response-time} ms',
+        'json'      => json_encode([
+            'method'               => '{method}',
+            'url'                  => '{url}',
+            'http-version'         => '{http-version}',
+            'referer'              => '{referer}',
+            'status'               => '{status}',
+            'content-length'       => '{content-length}',
+            'response-time'        => '{response-time}',
+            'remote-addr'          => '{remote-addr}',
+            'remote-user'          => '{remote-user}',
+            'date'                 => '{date}',
+        ])
     ];
 
     /**
@@ -62,15 +74,14 @@ class ResponseLogger
         $this->responseInterpolation->setRequest($request);
         $this->requestInterpolation->setRequest($request);
 
-        if( config('request-logger.logger.enabled') ) {
-            $format = config('request-logger.logger.format', "{ip} {remote_user} {date} {method} {url} HTTP/{http_version} {status} {content_length} {referer} {user_agent}");
+        if (config('request-logger.logger.enabled')) {
+            $format = config('request-logger.logger.format', '{ip} {remote_user} {date} {method} {url} HTTP/{http_version} {status} {content_length} {referer} {user_agent}');
             $format = array_get($this->formats, $format, $format);
             $message = $this->responseInterpolation->interpolate($format);
             $message = $this->requestInterpolation->interpolate($message);
-            $this->logger->log( config('request-logger.logger.level', 'info') , $message, [
+            $this->logger->log(config('request-logger.logger.level', 'info'), $message, [
                 static::LOG_CONTEXT
             ]);
         }
     }
-
 }
