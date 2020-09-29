@@ -1,5 +1,5 @@
 {
-  "name": "prettus/laravel-request-logger",
+  "name": "nestedminds/laravel-request-logger",
   "description": "HTTP request logger middleware for Laravel",
   "keywords": ["laravel", "logger", "request", "response"],
   "license": "MIT",
@@ -21,8 +21,8 @@
   },
   "require": {
     "php": ">=5.4.0",
-    "illuminate/support": "~5.0",
-    "illuminate/http": "~5.0",
+    "illuminate/support": "^5.0||^6.0|^7.0",
+    "illuminate/http": "^5.0||^6.0|^7.0",
     "monolog/monolog": "~1.11"
   },
   "require-dev" : {
